@@ -8,7 +8,8 @@ deployed to GitHub Pages via GitHub Actions.
 ```
 index.html                 # Single-page site (hero, work, services, about, contact)
 css/style.css              # Dark cinematic theme, responsive layout
-js/main.js                 # Mobile nav + footer year
+js/main.js                 # Mobile nav, video auto-pause, footer year
+videos/                    # MP4 project videos embedded in the work grid
 .github/workflows/deploy.yml  # GitHub Pages deployment workflow
 scripts/deploy.ps1         # One-command deploy (Windows / PowerShell)
 scripts/deploy.sh          # One-command deploy (macOS / Linux / Git Bash)
@@ -16,7 +17,8 @@ scripts/deploy.sh          # One-command deploy (macOS / Linux / Git Bash)
 
 ## Local preview
 
-No build step is required. Either open `index.html` directly, or serve it:
+No build step is required, but videos need an HTTP server (browsers block
+video streaming from `file://` URLs):
 
 ```powershell
 python -m http.server 8000
@@ -60,6 +62,11 @@ and run watching on top.
 
 - Replace the placeholder name **Alex Cutter**, bio, stats, and email in
   `index.html`.
-- Swap the `.work-thumb` placeholder divs for real thumbnails or embedded
-  Vimeo/YouTube iframes.
+- Drop MP4 files into `videos/` and point a work card's `<source src="...">`
+  at them, or swap the remaining `.work-thumb` placeholder divs for
+  thumbnails or embedded Vimeo/YouTube iframes.
 - Adjust colors via the CSS variables at the top of `css/style.css`.
+
+> **Note:** GitHub Pages serves files from the repo, so keep individual videos
+> under 100 MB (GitHub's per-file limit) and the total repo reasonably small.
+> For large showreels, prefer hosting on Vimeo/YouTube and embedding them.

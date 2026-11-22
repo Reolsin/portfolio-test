@@ -14,5 +14,15 @@ links.addEventListener("click", (e) => {
   }
 });
 
+// Pause other videos when one starts playing
+const videos = document.querySelectorAll(".work-media video");
+videos.forEach((video) => {
+  video.addEventListener("play", () => {
+    videos.forEach((other) => {
+      if (other !== video) other.pause();
+    });
+  });
+});
+
 // Current year in footer
 document.getElementById("year").textContent = new Date().getFullYear();
