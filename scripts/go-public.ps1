@@ -36,11 +36,10 @@ if ($Message) {
 
 # 3. Enable GitHub Pages with the Actions build type (idempotent).
 Write-Host "Ensuring GitHub Pages is enabled (build type: workflow)..."
-gh api -X POST "repos/$repoSlug/pages" -f build_type=workflow 2>$null | Out-Null
-if (-not $?) {
-    # POST fails with 409 if Pages already exists; switch it to workflow mode instead.
-    gh api -X PUT "repos/$repoSlug/pages" -f build_type=workflow | Out-Null
-}
+# POST returns 409 if Pages already exists; fall back to PUT to switch build type.
+# Use cmd /c so gh's stderr doesn't become a terminating error under EAP=Stop.
+& $env:ComSpec /c "gh api -X POST repos/$repoSlug/pages -f build_type=workflow >nul 2>&1 || gh api -X PUT repos/$repoSlug/pages -f build_type=workflow >nul 2>&1"
+if ($LASTEXITCODE -ne 0) { throw "Failed to enable GitHub Pages." }
 
 # 4. Trigger the deploy workflow and watch it.
 Write-Host "Triggering the deploy workflow..."
